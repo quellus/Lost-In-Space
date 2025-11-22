@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8htyyb7amnqk"]
+
+[ext_resource type="Script" uid="uid://daln2bmioqay3" path="res://scripts/space_chunk.gd" id="1_7d1c0"]
+
+[node name="SpaceChunk" type="Node3D"]
+script = ExtResource("1_7d1c0")

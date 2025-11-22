@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://bf5n3q130i2bv"]
+
+[ext_resource type="Script" uid="uid://qjr8fvwkh666" path="res://scenes/ship.gd" id="1_2gnfn"]
+[ext_resource type="PackedScene" uid="uid://wogibkq38vkf" path="res://scenes/player.tscn" id="1_q631a"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_03b2l"]
+size = Vector3(10, 1, 10)
+
+[sub_resource type="BoxMesh" id="BoxMesh_03b2l"]
+size = Vector3(10, 1, 10)
+
+[node name="Ship" type="CharacterBody3D"]
+script = ExtResource("1_2gnfn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_03b2l")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_03b2l")
+
+[node name="Player" parent="." instance=ExtResource("1_q631a")]
