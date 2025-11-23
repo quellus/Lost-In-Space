@@ -1,7 +1,6 @@
-class_name Ship extends CharacterBody3D
+class_name Ship extends RigidBody3D
 
-const SPEED = 1
+const SPEED: float = 1
 
 func _process(delta: float) -> void:
-	velocity = Vector3.FORWARD * SPEED
-	move_and_slide()
+	apply_central_force(Vector3.FORWARD * SPEED)
