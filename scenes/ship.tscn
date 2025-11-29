@@ -1,13 +1,28 @@
-[gd_scene load_steps=5 format=3 uid="uid://bf5n3q130i2bv"]
+[gd_scene load_steps=9 format=3 uid="uid://bf5n3q130i2bv"]
 
-[ext_resource type="Script" uid="uid://qjr8fvwkh666" path="res://scenes/ship.gd" id="1_2gnfn"]
-[ext_resource type="PackedScene" uid="uid://wogibkq38vkf" path="res://scenes/player.tscn" id="1_q631a"]
+[ext_resource type="Script" uid="uid://qjr8fvwkh666" path="res://scripts/ship.gd" id="1_2gnfn"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_03b2l"]
 size = Vector3(10, 1, 10)
 
 [sub_resource type="BoxMesh" id="BoxMesh_03b2l"]
 size = Vector3(10, 1, 10)
+
+[sub_resource type="BoxMesh" id="BoxMesh_q631a"]
+size = Vector3(4, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q631a"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2gnfn"]
+material = SubResource("StandardMaterial3D_q631a")
+size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q631a"]
+size = Vector3(5, 1, 5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4tobq"]
+size = Vector3(5, 1, 5)
 
 [node name="Ship" type="RigidBody3D"]
 gravity_scale = 0.0
@@ -19,4 +34,23 @@ shape = SubResource("BoxShape3D_03b2l")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_03b2l")
 
-[node name="Player" parent="." instance=ExtResource("1_q631a")]
+[node name="Interior" type="Node3D" parent="."]
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Interior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.158, 1, -4.5)
+mesh = SubResource("BoxMesh_q631a")
+skeleton = NodePath("../..")
+
+[node name="Node3D" type="Node3D" parent="Interior"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Interior/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5558076, 1.5419257, -4.183178)
+mesh = SubResource("BoxMesh_2gnfn")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.94531953, -0.32614568, 0, 0.32614568, 0.94531953, 0, 0, 0, 1, 4.680647, 0.43344355, 0)
+shape = SubResource("BoxShape3D_q631a")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D2"]
+mesh = SubResource("BoxMesh_4tobq")
+skeleton = NodePath("../..")

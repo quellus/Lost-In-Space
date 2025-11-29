@@ -1,0 +1,40 @@
+class_name FirstPersonController extends CharacterBody3D
+
+@export var ship: RigidBody3D = null
+
+const SPEED: float = 10 # m/s
+const ACCELERATION: float = 100 # m/s^2
+var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
+var gravity_velocity: Vector3 = Vector3.ZERO
+var walk_velocity: Vector3 = Vector3.ZERO
+
+@onready var camera: Camera3D = $Camera3D
+@onready var ray_cast_3d: RayCast3D = $RayCast3D
+
+func _ready() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed(&"exit"):
+		get_tree().quit()
+	elif event is InputEventMouseMotion:
+		var look_dir = event.relative * 0.001
+		camera.rotation.y -= look_dir.x
+		camera.rotation.x = clamp(camera.rotation.x - look_dir.y, -1.5, 1.5)
+
+
+func _physics_process(delta: float) -> void:
+	var move_dir = Input.get_vector(&"move_left", &"move_right", &"move_forward", &"move_backwards")
+	var forward = camera.global_transform.basis * Vector3(move_dir.x, 0, move_dir.y)
+	var walk_dir = Vector3(forward.x, 0, forward.z).normalized()
+	walk_velocity = walk_velocity.move_toward(walk_dir * SPEED * move_dir.length(), ACCELERATION * delta)
+	velocity = walk_velocity
+	if ship.is_node_ready():
+		velocity += ship.linear_velocity
+	if ray_cast_3d.is_colliding() and ray_cast_3d.get_collision_point().distance_to(ray_cast_3d.global_position) > 0.2:
+		gravity_velocity = gravity_velocity.move_toward(Vector3(0, velocity.y - gravity, 0), gravity * delta)
+	else:
+		gravity_velocity = Vector3.ZERO
+	velocity += gravity_velocity
+	move_and_slide()

@@ -1,16 +1,25 @@
-[gd_scene load_steps=4 format=3 uid="uid://c6s50q8hclnjr"]
+[gd_scene load_steps=5 format=3 uid="uid://c6s50q8hclnjr"]
 
 [ext_resource type="Script" uid="uid://1tp85jebbwu0" path="res://scripts/space.gd" id="1_rysn1"]
 [ext_resource type="PackedScene" uid="uid://bf5n3q130i2bv" path="res://scenes/ship.tscn" id="2_c6rj5"]
+[ext_resource type="PackedScene" uid="uid://wogibkq38vkf" path="res://scenes/player.tscn" id="2_dtwn4"]
 
 [sub_resource type="Environment" id="Environment_c6rj5"]
 
 [node name="Space" type="Node3D"]
 script = ExtResource("1_rysn1")
 
+[node name="Player" parent="." node_paths=PackedStringArray("ship") instance=ExtResource("2_dtwn4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1779962, 0)
+motion_mode = 1
+platform_on_leave = 2
+ship = NodePath("../Ship")
+
 [node name="Ship" parent="." instance=ExtResource("2_c6rj5")]
+collision_mask = 0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.83736587, 0.5466429, 0, -0.5466429, -0.83736587, 0, 743.7143, -479.14227)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_c6rj5")
