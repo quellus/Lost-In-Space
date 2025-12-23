@@ -9,7 +9,7 @@ var gravity_velocity: Vector3 = Vector3.ZERO
 var walk_velocity: Vector3 = Vector3.ZERO
 
 @onready var camera: Camera3D = $Camera3D
-@onready var ray_cast_3d: RayCast3D = $RayCast3D
+@onready var ground_ray_cast: RayCast3D = $GroundRayCast
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -32,7 +32,7 @@ func _physics_process(delta: float) -> void:
 	velocity = walk_velocity
 	if ship.is_node_ready():
 		velocity += ship.linear_velocity
-	if ray_cast_3d.is_colliding() and ray_cast_3d.get_collision_point().distance_to(ray_cast_3d.global_position) > 0.2:
+	if ground_ray_cast.is_colliding() and ground_ray_cast.get_collision_point().distance_to(ground_ray_cast.global_position) > 0.2:
 		gravity_velocity = gravity_velocity.move_toward(Vector3(0, velocity.y - gravity, 0), gravity * delta)
 	else:
 		gravity_velocity = Vector3.ZERO
