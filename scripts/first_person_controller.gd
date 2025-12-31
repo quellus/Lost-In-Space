@@ -4,7 +4,7 @@ class_name FirstPersonController extends CharacterBody3D
 
 @onready var camera: Camera3D = $Camera3D
 @onready var ground_ray_cast: RayCast3D = $GroundRayCast
-@onready var first_person_ray_cast: RayCast3D = $Camera3D/FirstPersonRayCast
+@onready var interact_ray_cast: RayCast3D = $Camera3D/FirstPersonRayCast
 
 const SPEED: float = 10 # m/s
 const ACCELERATION: float = 100 # m/s^2
@@ -28,7 +28,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	_handle_camera_control()
+	_update_looking_at()
 	_handle_first_person_movement(delta)
 
 func _handle_first_person_movement(delta: float) -> void:
@@ -46,12 +46,14 @@ func _handle_first_person_movement(delta: float) -> void:
 	velocity += gravity_velocity
 	move_and_slide()
 
-func _handle_camera_control() -> void:
-	if first_person_ray_cast.is_colliding():
-		var collider = first_person_ray_cast.get_collider()
-		if collider is Interactable and is_instance_valid(collider):
-			looking_at = collider
-			looking_at.highlight(true)
-	elif is_instance_valid(looking_at):
-		looking_at.highlight(false)
+func _update_looking_at() -> void:
+	var collider = interact_ray_cast.get_collider()
+	if interact_ray_cast.is_colliding() and collider is Interactable and is_instance_valid(collider):
+		if is_instance_valid(looking_at) and looking_at != collider:
+			looking_at.highlight(false)
+		looking_at = collider
+		looking_at.highlight(true)
+	else:
+		if is_instance_valid(looking_at):
+			looking_at.highlight(false)
 		looking_at = null
