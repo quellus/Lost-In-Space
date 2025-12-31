@@ -13,6 +13,10 @@ shape = SubResource("CapsuleShape3D_u8vuu")
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.705678, 0)
 
+[node name="FirstPersonRayCast" type="RayCast3D" parent="Camera3D"]
+target_position = Vector3(0, 0, -4)
+debug_shape_custom_color = Color(0, 1, 0, 1)
+
 [node name="GroundRayCast" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 target_position = Vector3(0, -3, 0)

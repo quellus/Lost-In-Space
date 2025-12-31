@@ -2,14 +2,17 @@ class_name FirstPersonController extends CharacterBody3D
 
 @export var ship: RigidBody3D = null
 
+@onready var camera: Camera3D = $Camera3D
+@onready var ground_ray_cast: RayCast3D = $GroundRayCast
+@onready var first_person_ray_cast: RayCast3D = $Camera3D/FirstPersonRayCast
+
 const SPEED: float = 10 # m/s
 const ACCELERATION: float = 100 # m/s^2
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var gravity_velocity: Vector3 = Vector3.ZERO
 var walk_velocity: Vector3 = Vector3.ZERO
 
-@onready var camera: Camera3D = $Camera3D
-@onready var ground_ray_cast: RayCast3D = $GroundRayCast
+var looking_at: Interactable = null
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -25,6 +28,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	_handle_camera_control()
+	_handle_first_person_movement(delta)
+
+func _handle_first_person_movement(delta: float) -> void:
 	var move_dir = Input.get_vector(&"move_left", &"move_right", &"move_forward", &"move_backwards")
 	var forward = camera.global_transform.basis * Vector3(move_dir.x, 0, move_dir.y)
 	var walk_dir = Vector3(forward.x, 0, forward.z).normalized()
@@ -38,3 +45,13 @@ func _physics_process(delta: float) -> void:
 		gravity_velocity = Vector3.ZERO
 	velocity += gravity_velocity
 	move_and_slide()
+
+func _handle_camera_control() -> void:
+	if first_person_ray_cast.is_colliding():
+		var collider = first_person_ray_cast.get_collider()
+		if collider is Interactable and is_instance_valid(collider):
+			looking_at = collider
+			looking_at.highlight(true)
+	elif is_instance_valid(looking_at):
+		looking_at.highlight(false)
+		looking_at = null

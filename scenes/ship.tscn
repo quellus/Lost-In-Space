@@ -1,6 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://bf5n3q130i2bv"]
+[gd_scene load_steps=12 format=3 uid="uid://bf5n3q130i2bv"]
 
 [ext_resource type="Script" uid="uid://qjr8fvwkh666" path="res://scripts/ship.gd" id="1_2gnfn"]
+[ext_resource type="Script" uid="uid://din6nby37y0ex" path="res://scenes/interactable.gd" id="2_2gnfn"]
+[ext_resource type="Material" uid="uid://jftme3ma5gbq" path="res://highlight_material.tres" id="3_4tobq"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_03b2l"]
 size = Vector3(10, 1, 10)
@@ -16,7 +18,10 @@ albedo_color = Color(1, 0, 0, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_2gnfn"]
 material = SubResource("StandardMaterial3D_q631a")
-size = Vector3(0.2, 0.2, 0.2)
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2gnfn"]
+size = Vector3(0.5, 0.5, 0.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_q631a"]
 size = Vector3(5, 1, 5)
@@ -41,11 +46,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.158, 1, -4.5)
 mesh = SubResource("BoxMesh_q631a")
 skeleton = NodePath("../..")
 
-[node name="Node3D" type="Node3D" parent="Interior"]
+[node name="Button" type="StaticBody3D" parent="Interior" node_paths=PackedStringArray("visual_meshes")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.542, -4.183)
+script = ExtResource("2_2gnfn")
+visual_meshes = [NodePath("MeshInstance3D")]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Interior/Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5558076, 1.5419257, -4.183178)
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Interior/Button"]
+material_overlay = ExtResource("3_4tobq")
 mesh = SubResource("BoxMesh_2gnfn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interior/Button"]
+shape = SubResource("BoxShape3D_2gnfn")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
 transform = Transform3D(0.94531953, -0.32614568, 0, 0.32614568, 0.94531953, 0, 0, 0, 1, 4.680647, 0.43344355, 0)
